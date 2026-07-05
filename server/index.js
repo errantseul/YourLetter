@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { nanoid } from 'nanoid';
-import db from './db.js';
+import pool, { init } from './db.js';
 
 const app = express();
 app.use(cors());
@@ -45,71 +45,62 @@ function rowToLetter(row) {
   };
 }
 
-app.post('/api/letters', (req, res) => {
+app.get('/', (req, res) => {
+  res.json({ ok: true, service: 'your-letter-api' });
+});
+
+app.post('/api/letters', async (req, res) => {
   const errors = validateLetterBody(req.body || {});
   if (errors.length) return res.status(400).json({ errors });
 
   const id = nanoid(8);
   const now = new Date().toISOString();
   const b = req.body;
-  db.prepare(
+  const result = await pool.query(
     `INSERT INTO letters (id, lang, recipient, sender, greeting, message, quote_text, quote_author, scene_index, created_at, updated_at)
-     VALUES (@id, @lang, @recipient, @sender, @greeting, @message, @quoteText, @quoteAuthor, @sceneIndex, @createdAt, @updatedAt)`
-  ).run({
-    id,
-    lang: b.lang,
-    recipient: b.recipient,
-    sender: b.sender,
-    greeting: b.greeting,
-    message: b.message,
-    quoteText: b.quoteText,
-    quoteAuthor: b.quoteAuthor,
-    sceneIndex: Number(b.sceneIndex),
-    createdAt: now,
-    updatedAt: now,
-  });
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+     RETURNING *`,
+    [id, b.lang, b.recipient, b.sender, b.greeting, b.message, b.quoteText, b.quoteAuthor, Number(b.sceneIndex), now, now]
+  );
 
-  const row = db.prepare('SELECT * FROM letters WHERE id = ?').get(id);
-  res.status(201).json(rowToLetter(row));
+  res.status(201).json(rowToLetter(result.rows[0]));
 });
 
-app.get('/api/letters/:id', (req, res) => {
-  const row = db.prepare('SELECT * FROM letters WHERE id = ?').get(req.params.id);
-  if (!row) return res.status(404).json({ error: 'Letter not found' });
-  res.json(rowToLetter(row));
+app.get('/api/letters/:id', async (req, res) => {
+  const result = await pool.query('SELECT * FROM letters WHERE id = $1', [req.params.id]);
+  if (!result.rows[0]) return res.status(404).json({ error: 'Letter not found' });
+  res.json(rowToLetter(result.rows[0]));
 });
 
-app.patch('/api/letters/:id', (req, res) => {
-  const existing = db.prepare('SELECT * FROM letters WHERE id = ?').get(req.params.id);
-  if (!existing) return res.status(404).json({ error: 'Letter not found' });
+app.patch('/api/letters/:id', async (req, res) => {
+  const existing = await pool.query('SELECT * FROM letters WHERE id = $1', [req.params.id]);
+  if (!existing.rows[0]) return res.status(404).json({ error: 'Letter not found' });
 
   const errors = validateLetterBody(req.body || {});
   if (errors.length) return res.status(400).json({ errors });
 
   const b = req.body;
   const now = new Date().toISOString();
-  db.prepare(
-    `UPDATE letters SET lang=@lang, recipient=@recipient, sender=@sender, greeting=@greeting,
-       message=@message, quote_text=@quoteText, quote_author=@quoteAuthor, scene_index=@sceneIndex, updated_at=@updatedAt
-     WHERE id=@id`
-  ).run({
-    id: req.params.id,
-    lang: b.lang,
-    recipient: b.recipient,
-    sender: b.sender,
-    greeting: b.greeting,
-    message: b.message,
-    quoteText: b.quoteText,
-    quoteAuthor: b.quoteAuthor,
-    sceneIndex: Number(b.sceneIndex),
-    updatedAt: now,
-  });
+  const result = await pool.query(
+    `UPDATE letters SET lang=$1, recipient=$2, sender=$3, greeting=$4,
+       message=$5, quote_text=$6, quote_author=$7, scene_index=$8, updated_at=$9
+     WHERE id=$10
+     RETURNING *`,
+    [b.lang, b.recipient, b.sender, b.greeting, b.message, b.quoteText, b.quoteAuthor, Number(b.sceneIndex), now, req.params.id]
+  );
 
-  const row = db.prepare('SELECT * FROM letters WHERE id = ?').get(req.params.id);
-  res.json(rowToLetter(row));
+  res.json(rowToLetter(result.rows[0]));
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Your Letter API listening on http://localhost:${PORT}`);
-});
+
+init()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Your Letter API listening on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to initialize database:', err.message);
+    process.exit(1);
+  });
