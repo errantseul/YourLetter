@@ -1,22 +1,15 @@
 import pg from 'pg';
-import { getConnectionString } from '@netlify/database';
 
 const { Pool } = pg;
 
-function resolveConnectionString() {
-  // A manually-set DATABASE_URL (e.g. in server/.env) takes priority, for
-  // plain `node` local dev where Netlify's runtime context isn't present.
-  // Otherwise defer to Netlify Database (Neon), which injects its own
-  // connection string automatically for Functions/scheduled functions.
-  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
-  try {
-    return getConnectionString();
-  } catch {
-    return undefined;
-  }
-}
-
-const connectionString = resolveConnectionString();
+// A manually-set DATABASE_URL (e.g. in server/.env) wins for plain `node`
+// local dev. In production, Netlify Database (Neon) injects its own
+// connection string under NETLIFY_DB_URL. (We read this directly rather
+// than via the @netlify/database package: that package pulls in extra
+// dependencies — @neondatabase/serverless, ws, waddler — that Netlify's
+// function bundler failed to package correctly for this repo's layout,
+// and all it does internally is read this same variable.)
+const connectionString = process.env.DATABASE_URL || process.env.NETLIFY_DB_URL;
 const isLocalDb = /localhost|127\.0\.0\.1/.test(connectionString || '');
 
 const pool = new Pool({
