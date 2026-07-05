@@ -62,17 +62,6 @@ router.get('/', (req, res) => {
   res.json({ ok: true, service: 'your-letter-api' });
 });
 
-// TEMPORARY diagnostic route — remove once the body-parsing issue is found.
-router.post('/debug', (req, res) => {
-  res.json({
-    contentType: req.headers['content-type'],
-    contentLength: req.headers['content-length'],
-    bodyIsUndefined: req.body === undefined,
-    bodyType: typeof req.body,
-    body: req.body,
-  });
-});
-
 router.post('/letters', async (req, res) => {
   const errors = validateLetterBody(req.body || {});
   if (errors.length) return res.status(400).json({ errors });
@@ -120,6 +109,24 @@ router.patch('/letters/:id', async (req, res) => {
 const app = express();
 app.use(cors());
 app.use(express.json());
+// serverless-http's fake request (used when this app runs as a Netlify
+// Function) marks itself `complete: true` at construction time, which
+// trips body-parser's "already finished" fast path — express.json()
+// above ends up skipped entirely there, leaving req.body as the raw
+// Buffer serverless-http attached. Finish the job ourselves in that
+// case; plain `node` local dev never hits this branch since
+// express.json() already produced a real object by this point.
+app.use((req, res, next) => {
+  if (Buffer.isBuffer(req.body)) {
+    const raw = req.body.toString('utf8').trim();
+    try {
+      req.body = raw ? JSON.parse(raw) : {};
+    } catch {
+      return res.status(400).json({ error: 'Invalid JSON body' });
+    }
+  }
+  next();
+});
 // Mounted at both prefixes so the same app works as a standalone server
 // (behind the Vite "/api" dev proxy) and as a Netlify Function, which
 // receives requests at its own "/.netlify/functions/api" path.
