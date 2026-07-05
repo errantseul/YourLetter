@@ -62,6 +62,17 @@ router.get('/', (req, res) => {
   res.json({ ok: true, service: 'your-letter-api' });
 });
 
+// TEMPORARY diagnostic route — remove once the body-parsing issue is found.
+router.post('/debug', (req, res) => {
+  res.json({
+    contentType: req.headers['content-type'],
+    contentLength: req.headers['content-length'],
+    bodyIsUndefined: req.body === undefined,
+    bodyType: typeof req.body,
+    body: req.body,
+  });
+});
+
 router.post('/letters', async (req, res) => {
   const errors = validateLetterBody(req.body || {});
   if (errors.length) return res.status(400).json({ errors });
