@@ -6,6 +6,12 @@ import { makeScene } from '../data/scenes.js';
 import { getLetter } from '../api.js';
 import './Preview.css';
 
+const LOCALE = { id: 'id-ID', en: 'en-US', kr: 'ko-KR' };
+
+function formatDate(iso, lang) {
+  return new Date(iso).toLocaleString(LOCALE[lang] || 'en-US', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
 export default function Preview() {
   const { t, lang } = useLanguage();
   const navigate = useNavigate();
@@ -76,6 +82,14 @@ export default function Preview() {
         scene={scene}
         bandH="240px"
       />
+
+      {letter.sendAt && (
+        <div className="preview-schedule">
+          {letter.sentAt
+            ? `✅ ${t.pvSentPrefix} ${letter.recipientEmail}`
+            : `📧 ${t.pvScheduledPrefix} ${letter.recipientEmail} ${t.pvScheduledAt} ${formatDate(letter.sendAt, lang)}`}
+        </div>
+      )}
 
       <div className="preview-share">
         <label className="field-label">{t.lblLink}</label>

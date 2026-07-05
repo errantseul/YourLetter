@@ -9,6 +9,8 @@ function isNonEmptyString(v) {
   return typeof v === 'string' && v.trim().length > 0;
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function validateLetterBody(body) {
   const errors = [];
   if (!['id', 'en', 'kr'].includes(body.lang)) errors.push('lang must be one of id, en, kr');
@@ -21,6 +23,16 @@ function validateLetterBody(body) {
   const sceneIndex = Number(body.sceneIndex);
   if (!Number.isInteger(sceneIndex) || sceneIndex < 0 || sceneIndex >= SCENE_COUNT) {
     errors.push(`sceneIndex must be an integer between 0 and ${SCENE_COUNT - 1}`);
+  }
+  // Scheduling is opt-in: only validated when the user is actually setting
+  // one up (either field present), otherwise both stay null.
+  if (body.recipientEmail || body.sendAt) {
+    if (!isNonEmptyString(body.recipientEmail) || !EMAIL_RE.test(body.recipientEmail)) {
+      errors.push('recipientEmail must be a valid email when scheduling a send');
+    }
+    if (!isNonEmptyString(body.sendAt) || Number.isNaN(Date.parse(body.sendAt))) {
+      errors.push('sendAt must be a valid date when scheduling a send');
+    }
   }
   return errors;
 }
@@ -36,6 +48,9 @@ function rowToLetter(row) {
     quoteText: row.quote_text,
     quoteAuthor: row.quote_author,
     sceneIndex: row.scene_index,
+    recipientEmail: row.recipient_email,
+    sendAt: row.send_at,
+    sentAt: row.sent_at,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -55,10 +70,10 @@ router.post('/letters', async (req, res) => {
   const now = new Date().toISOString();
   const b = req.body;
   const result = await pool.query(
-    `INSERT INTO letters (id, lang, recipient, sender, greeting, message, quote_text, quote_author, scene_index, created_at, updated_at)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)
+    `INSERT INTO letters (id, lang, recipient, sender, greeting, message, quote_text, quote_author, scene_index, recipient_email, send_at, created_at, updated_at)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
      RETURNING *`,
-    [id, b.lang, b.recipient, b.sender, b.greeting, b.message, b.quoteText, b.quoteAuthor, Number(b.sceneIndex), now, now]
+    [id, b.lang, b.recipient, b.sender, b.greeting, b.message, b.quoteText, b.quoteAuthor, Number(b.sceneIndex), b.recipientEmail || null, b.sendAt || null, now, now]
   );
 
   res.status(201).json(rowToLetter(result.rows[0]));
@@ -81,10 +96,11 @@ router.patch('/letters/:id', async (req, res) => {
   const now = new Date().toISOString();
   const result = await pool.query(
     `UPDATE letters SET lang=$1, recipient=$2, sender=$3, greeting=$4,
-       message=$5, quote_text=$6, quote_author=$7, scene_index=$8, updated_at=$9
-     WHERE id=$10
+       message=$5, quote_text=$6, quote_author=$7, scene_index=$8,
+       recipient_email=$9, send_at=$10, sent_at=NULL, updated_at=$11
+     WHERE id=$12
      RETURNING *`,
-    [b.lang, b.recipient, b.sender, b.greeting, b.message, b.quoteText, b.quoteAuthor, Number(b.sceneIndex), now, req.params.id]
+    [b.lang, b.recipient, b.sender, b.greeting, b.message, b.quoteText, b.quoteAuthor, Number(b.sceneIndex), b.recipientEmail || null, b.sendAt || null, now, req.params.id]
   );
 
   res.json(rowToLetter(result.rows[0]));

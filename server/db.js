@@ -25,6 +25,14 @@ export async function init() {
       updated_at TEXT NOT NULL
     )
   `);
+  // Added for scheduled email delivery; IF NOT EXISTS keeps this safe to
+  // rerun against a database created before these columns existed.
+  await pool.query(`
+    ALTER TABLE letters
+      ADD COLUMN IF NOT EXISTS recipient_email TEXT,
+      ADD COLUMN IF NOT EXISTS send_at TEXT,
+      ADD COLUMN IF NOT EXISTS sent_at TEXT
+  `);
 }
 
 export default pool;

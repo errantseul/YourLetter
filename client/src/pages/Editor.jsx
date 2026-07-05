@@ -8,7 +8,13 @@ import { greetingFor } from '../data/strings.js';
 import { createLetter, getLetter, updateLetter } from '../api.js';
 import './Editor.css';
 
-const emptyDraft = { to: '', from: '', message: '', quoteText: '', quoteAuthor: '' };
+const emptyDraft = { to: '', from: '', message: '', quoteText: '', quoteAuthor: '', recipientEmail: '', sendAt: '' };
+
+function toDatetimeLocalValue(iso) {
+  const d = new Date(iso);
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 export default function Editor() {
   const { t, lang } = useLanguage();
@@ -38,6 +44,8 @@ export default function Editor() {
           message: letter.message,
           quoteText: letter.quoteText,
           quoteAuthor: letter.quoteAuthor,
+          recipientEmail: letter.recipientEmail || '',
+          sendAt: letter.sendAt ? toDatetimeLocalValue(letter.sendAt) : '',
         });
         setSceneIndex(letter.sceneIndex);
         setStatus('ready');
@@ -76,6 +84,12 @@ export default function Editor() {
   };
 
   const submit = async () => {
+    const wantsSchedule = draft.recipientEmail.trim() || draft.sendAt;
+    if (wantsSchedule && (!draft.recipientEmail.trim() || !draft.sendAt)) {
+      alert(t.scheduleHint);
+      return;
+    }
+
     setSaving(true);
     const payload = {
       lang,
@@ -86,6 +100,8 @@ export default function Editor() {
       quoteText: card.quoteText,
       quoteAuthor: card.quoteAuthor,
       sceneIndex,
+      recipientEmail: draft.recipientEmail.trim() || undefined,
+      sendAt: draft.sendAt ? new Date(draft.sendAt).toISOString() : undefined,
     };
     try {
       const saved = id ? await updateLetter(id, payload) : await createLetter(payload);
@@ -180,6 +196,32 @@ export default function Editor() {
                   </button>
                 );
               })}
+            </div>
+          </div>
+
+          <div>
+            <label className="field-label">{t.lblScheduleSection}</label>
+            <p className="editor-schedule-hint">{t.scheduleHint}</p>
+            <div className="editor-row-2">
+              <div>
+                <label className="field-label">{t.lblRecipientEmail}</label>
+                <input
+                  type="email"
+                  className="field-input"
+                  value={draft.recipientEmail}
+                  onChange={set('recipientEmail')}
+                  placeholder={t.phRecipientEmail}
+                />
+              </div>
+              <div>
+                <label className="field-label">{t.lblSendAt}</label>
+                <input
+                  type="datetime-local"
+                  className="field-input"
+                  value={draft.sendAt}
+                  onChange={set('sendAt')}
+                />
+              </div>
             </div>
           </div>
 

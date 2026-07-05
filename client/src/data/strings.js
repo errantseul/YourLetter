@@ -18,6 +18,11 @@ export const strings = {
     sampTo: 'Kamu', sampFrom: 'Aku', sampMessage: 'Halo! Suratku sederhana saja — semoga kamu baik-baik saja dan hari ini secerah langit di gambar ini. 🧡', sampQuote: 'Bahagia itu sederhana, seperti membaca surat darimu.',
     anon: 'Anonim',
     loading: 'Memuat…', notFoundTitle: 'Surat tidak ditemukan', notFoundBody: 'Tautan ini mungkin salah atau sudah kedaluwarsa.',
+    lblScheduleSection: '📧 Jadwalkan Kirim Email (opsional)',
+    scheduleHint: 'Isi keduanya untuk mengirim surat ini otomatis lewat email pada waktu tertentu. Kosongkan untuk berbagi lewat tautan seperti biasa.',
+    lblRecipientEmail: 'Email penerima', phRecipientEmail: 'nama@email.com',
+    lblSendAt: 'Kirim pada',
+    pvScheduledPrefix: 'Terjadwal kirim ke', pvScheduledAt: 'pada', pvSentPrefix: 'Sudah terkirim ke',
   },
   en: {
     navHome: 'Home', navWrite: 'Write', navPreview: 'Preview', navReceive: 'Receive',
@@ -37,6 +42,11 @@ export const strings = {
     sampTo: 'You', sampFrom: 'Me', sampMessage: "Hi! My letter is a simple one — I hope you're well, and that today is as bright as the sky in this picture. 🧡", sampQuote: 'Happiness is simple, like reading a letter from you.',
     anon: 'Anonymous',
     loading: 'Loading…', notFoundTitle: 'Letter not found', notFoundBody: 'This link may be wrong or expired.',
+    lblScheduleSection: '📧 Schedule Email Delivery (optional)',
+    scheduleHint: "Fill in both to have this letter emailed automatically at a chosen time. Leave blank to just share a link as usual.",
+    lblRecipientEmail: "Recipient's email", phRecipientEmail: 'name@email.com',
+    lblSendAt: 'Send at',
+    pvScheduledPrefix: 'Scheduled to send to', pvScheduledAt: 'at', pvSentPrefix: 'Already sent to',
   },
   kr: {
     navHome: '홈', navWrite: '작성', navPreview: '미리보기', navReceive: '받기',
@@ -56,6 +66,11 @@ export const strings = {
     sampTo: '너', sampFrom: '나로부터', sampMessage: '안녕! 소박한 편지야 — 잘 지내길 바라고, 오늘이 이 그림 속 하늘처럼 맑기를 바라. 🧡', sampQuote: '행복은 단순해, 너의 편지를 읽는 것처럼.',
     anon: '익명',
     loading: '불러오는 중…', notFoundTitle: '편지를 찾을 수 없어요', notFoundBody: '이 링크가 잘못되었거나 만료되었을 수 있어요.',
+    lblScheduleSection: '📧 이메일 예약 발송 (선택)',
+    scheduleHint: '두 항목을 모두 입력하면 정해진 시간에 이메일로 자동 발송돼요. 비워두면 평소처럼 링크로만 공유돼요.',
+    lblRecipientEmail: '받는 사람 이메일', phRecipientEmail: 'name@email.com',
+    lblSendAt: '보낼 시간',
+    pvScheduledPrefix: '예약 발송 대상', pvScheduledAt: '시간', pvSentPrefix: '이미 발송됨',
   },
 };
 
