@@ -1,5 +1,5 @@
 import { schedule } from '@netlify/functions';
-import pool, { init } from '../../server/db.js';
+import { pool, init } from '../../server/db.js';
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Your Letter <onboarding@resend.dev>';
 const SITE_URL = process.env.URL || process.env.DEPLOY_URL || '';

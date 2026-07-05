@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { nanoid } from 'nanoid';
-import pool, { init } from './db.js';
+import { pool, init } from './db.js';
 
 const SCENE_COUNT = 6;
 

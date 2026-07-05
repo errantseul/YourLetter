@@ -43,4 +43,4 @@ export async function init() {
   `);
 }
 
-export default pool;
+export { pool };
