@@ -1,0 +1,70 @@
+.nav-pill {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  gap: 4px;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 5px;
+  box-shadow: 4px 4px 0 rgba(46, 42, 62, 0.9);
+}
+
+.nav-pill-btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 15px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.12s;
+  background: transparent;
+  color: var(--ink);
+  text-decoration: none;
+  display: inline-block;
+}
+.nav-pill-btn:hover {
+  filter: brightness(0.97);
+}
+.nav-pill-btn.is-active {
+  background: var(--ink);
+  color: #fff;
+}
+
+.lang-pill {
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 50;
+  display: flex;
+  gap: 3px;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 4px 4px 0 rgba(46, 42, 62, 0.9);
+}
+
+.lang-pill-btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  transition: all 0.12s;
+  background: transparent;
+  color: var(--ink);
+}
+.lang-pill-btn:hover {
+  filter: brightness(0.97);
+}
+.lang-pill-btn.is-active {
+  background: var(--ink);
+  color: #fff;
+}

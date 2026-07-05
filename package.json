@@ -1,0 +1,16 @@
+{
+  "name": "your-letter",
+  "version": "1.0.0",
+  "description": "Your Letter — write a message, pick a quote and a mood, share it as a postcard link.",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n server,client -c yellow,cyan \"npm:dev --prefix server\" \"npm:dev --prefix client\"",
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "build": "npm run build --prefix client"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^10.0.3",
+    "playwright": "^1.61.1"
+  }
+}

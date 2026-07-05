@@ -1,0 +1,43 @@
+.read,
+.read-status {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 92px 24px 70px;
+}
+
+.read-status {
+  text-align: center;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.read-badge-row {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.read-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--yellow);
+  border: 2.5px solid var(--ink);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  box-shadow: 3px 3px 0 rgba(46, 42, 62, 0.9);
+  animation: yl-pop 0.4s ease both;
+}
+
+.read-postcard {
+  animation: yl-open 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.read-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 26px;
+  flex-wrap: wrap;
+}

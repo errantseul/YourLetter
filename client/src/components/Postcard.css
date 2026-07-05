@@ -1,0 +1,186 @@
+.postcard {
+  width: 100%;
+  font-family: 'Nunito', sans-serif;
+}
+
+.postcard-card {
+  border: 3px solid var(--ink);
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: 7px 8px 0 rgba(46, 42, 62, 0.9);
+}
+
+.postcard-band {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--ink);
+}
+
+.postcard-sky {
+  position: absolute;
+  inset: 0;
+}
+
+.postcard-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff6d6;
+}
+
+.postcard-moon {
+  position: absolute;
+  top: 16%;
+  right: 14%;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.postcard-sun {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.postcard-cloud {
+  position: absolute;
+}
+
+.postcard-cloud-body {
+  border-radius: 999px;
+}
+
+.postcard-cloud-puff {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.postcard-sea {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44%;
+  border-top: 2.5px solid rgba(255, 255, 255, 0.45);
+}
+
+.postcard-wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.postcard-hill {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.postcard-flower {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.postcard-stamp {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 46px;
+  height: 52px;
+  background: var(--paper);
+  border: 2.5px solid var(--ink);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 0 rgba(46, 42, 62, 0.9);
+  transform: rotate(4deg);
+}
+
+.postcard-stamp-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.postcard-stamp-label {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 7px;
+  letter-spacing: 1px;
+  color: var(--ink);
+  margin-top: 3px;
+  width: 32px;
+  height: 17px;
+  text-align: center;
+}
+
+.postcard-scene-pill {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 253, 246, 0.92);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 11px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.postcard-note {
+  padding: 22px 22px 24px;
+}
+
+.postcard-greeting {
+  font-family: 'Gaegu', cursive;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.postcard-message {
+  font-family: 'Gaegu', cursive;
+  font-size: 19px;
+  line-height: 1.55;
+  color: #3a3550;
+  margin: 0 0 16px;
+  white-space: pre-wrap;
+  text-wrap: pretty;
+}
+
+.postcard-quote-box {
+  border: 2.5px dashed var(--quote-border);
+  background: var(--quote-bg);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.postcard-quote-text {
+  font-family: 'Gaegu', cursive;
+  font-size: 19px;
+  line-height: 1.45;
+  color: #6b4f16;
+}
+
+.postcard-quote-author {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #a9832f;
+  text-align: right;
+  margin-top: 6px;
+}
+
+.postcard-sender {
+  font-family: 'Gaegu', cursive;
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--ink);
+  text-align: right;
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Gaegu:wght@400;700&amp;family=Nunito:wght@400;600;700&amp;display=swap" rel="stylesheet">
+</helmet>
+
+<div style="width:100%; font-family:'Nunito',sans-serif;">
+  <div style="border:3px solid #2E2A3E; border-radius:24px; overflow:hidden; background:#FFFDF6; box-shadow:7px 8px 0 rgba(46,42,62,0.9);">
+
+    <!-- SCENE / ILLUSTRATION -->
+    <div style="position:relative; overflow:hidden; height:{{ bandH }}; border-bottom:3px solid #2E2A3E;">
+      <div style="position:absolute; inset:0; background:{{ scene.skyGrad }};"></div>
+
+      <sc-if value="{{ scene.hasStars }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; top:14%; left:16%; width:4px; height:4px; border-radius:50%; background:#FFF6D6; box-shadow:0 0 6px #FFF6D6;"></div>
+        <div style="position:absolute; top:26%; left:38%; width:3px; height:3px; border-radius:50%; background:#FFF6D6;"></div>
+        <div style="position:absolute; top:10%; left:60%; width:5px; height:5px; border-radius:50%; background:#FFF6D6; box-shadow:0 0 6px #FFF6D6;"></div>
+        <div style="position:absolute; top:32%; left:76%; width:3px; height:3px; border-radius:50%; background:#FFF6D6;"></div>
+        <div style="position:absolute; top:20%; left:88%; width:4px; height:4px; border-radius:50%; background:#FFF6D6; box-shadow:0 0 5px #FFF6D6;"></div>
+        <div style="position:absolute; top:42%; left:28%; width:3px; height:3px; border-radius:50%; background:#FFF6D6;"></div>
+        <div style="position:absolute; top:46%; left:66%; width:3px; height:3px; border-radius:50%; background:#FFF6D6;"></div>
+      </sc-if>
+
+      <sc-if value="{{ scene.hasMoon }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; top:16%; right:14%; width:64px; height:64px; border-radius:50%; background:{{ scene.moonColor }}; box-shadow:0 0 22px rgba(251,233,176,0.55), inset -14px -6px 0 rgba(0,0,0,0.06);"></div>
+      </sc-if>
+
+      <sc-if value="{{ scene.hasSun }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; top:{{ scene.sunTop }}; left:{{ scene.sunLeft }}; width:{{ scene.sunSize }}px; height:{{ scene.sunSize }}px; border-radius:50%; background:{{ scene.sunColor }}; box-shadow:0 0 0 8px rgba(255,255,255,0.18), 0 0 34px {{ scene.sunColor }};"></div>
+      </sc-if>
+
+      <sc-if value="{{ scene.hasClouds }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; top:22%; left:12%;">
+          <div style="width:58px; height:24px; border-radius:999px; background:{{ scene.cloudColor }};"></div>
+          <div style="position:absolute; top:-14px; left:12px; width:30px; height:30px; border-radius:50%; background:{{ scene.cloudColor }};"></div>
+          <div style="position:absolute; top:-9px; left:32px; width:22px; height:22px; border-radius:50%; background:{{ scene.cloudColor }};"></div>
+        </div>
+        <div style="position:absolute; top:38%; right:16%;">
+          <div style="width:44px; height:18px; border-radius:999px; background:{{ scene.cloudColor }};"></div>
+          <div style="position:absolute; top:-10px; left:10px; width:22px; height:22px; border-radius:50%; background:{{ scene.cloudColor }};"></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ scene.hasSea }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; left:0; right:0; bottom:0; height:44%; background:linear-gradient(180deg, {{ scene.seaColor }}, rgba(0,0,0,0.12)); border-top:2.5px solid rgba(255,255,255,0.45);"></div>
+        <div style="position:absolute; left:0; right:0; bottom:30%; height:5px; background:rgba(255,255,255,0.35);"></div>
+        <div style="position:absolute; left:0; right:0; bottom:16%; height:4px; background:rgba(255,255,255,0.25);"></div>
+      </sc-if>
+
+      <sc-if value="{{ scene.hasHills }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; bottom:-46px; left:-12%; width:75%; height:120px; border-radius:50%; background:{{ scene.hillColor2 }};"></div>
+        <div style="position:absolute; bottom:-52px; right:-14%; width:78%; height:130px; border-radius:50%; background:{{ scene.hillColor }};"></div>
+      </sc-if>
+
+      <sc-if value="{{ scene.hasFlowers }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; bottom:12px; left:18%; width:8px; height:8px; border-radius:50%; background:{{ scene.flowerColor }}; box-shadow:0 0 0 2px rgba(255,255,255,0.8);"></div>
+        <div style="position:absolute; bottom:22px; left:44%; width:7px; height:7px; border-radius:50%; background:#FFF3B0; box-shadow:0 0 0 2px rgba(255,255,255,0.8);"></div>
+        <div style="position:absolute; bottom:9px; left:70%; width:8px; height:8px; border-radius:50%; background:{{ scene.flowerColor }}; box-shadow:0 0 0 2px rgba(255,255,255,0.8);"></div>
+      </sc-if>
+
+      <!-- Stamp -->
+      <div style="position:absolute; top:12px; right:12px; width:46px; height:52px; background:#FFFDF6; border:2.5px solid #2E2A3E; border-radius:8px; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:2px 2px 0 rgba(46,42,62,0.9); transform:rotate(4deg);">
+        <div style="font-size:20px; line-height:1;">{{ scene.emoji }}</div><div style="font-family: 'Fredoka',sans-serif; font-size: 7px; letter-spacing: 1px; color: #2E2A3E; margin-top: 3px; width: 32px; height: 17px">YOUR LETTER</div>
+        
+      </div>
+
+      <!-- Scene name pill -->
+      <div style="position:absolute; left:12px; bottom:12px; display:flex; align-items:center; gap:6px; background:rgba(255,253,246,0.92); border:2px solid #2E2A3E; border-radius:999px; padding:4px 11px; font-family:'Fredoka',sans-serif; font-weight:600; font-size:12px; color:#2E2A3E;">
+        <span>{{ scene.emoji }}</span><span>{{ scene.name }}</span>
+      </div>
+    </div>
+
+    <!-- NOTE -->
+    <div style="padding:22px 22px 24px;">
+      <div style="font-family:'Gaegu',cursive; font-weight:700; font-size:24px; color:#2E2A3E; margin-bottom:8px;">{{ greeting }}</div>
+      <p style="font-family:'Gaegu',cursive; font-size:19px; line-height:1.55; color:#3a3550; margin:0 0 16px; white-space:pre-wrap; text-wrap:pretty;">{{ message }}</p>
+
+      <div style="border:2.5px dashed #D8A94B; background:#FFF7E0; border-radius:16px; padding:12px 14px; margin-bottom:18px;">
+        <div style="font-family:'Gaegu',cursive; font-size:19px; line-height:1.45; color:#6b4f16;">“{{ quoteText }}”</div>
+        <sc-if value="{{ quoteAuthor }}" hint-placeholder-val="Anonim">
+          <div style="font-family:'Nunito',sans-serif; font-size:12px; font-weight:700; color:#a9832f; text-align:right; margin-top:6px;">— {{ quoteAuthor }}</div>
+        </sc-if>
+      </div>
+
+      <div style="font-family:'Gaegu',cursive; font-weight:700; font-size:21px; color:#2E2A3E; text-align:right;">— {{ sender }}</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 420, &quot;height&quot;: 560},
+  &quot;greeting&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Untuk Sahabatku,&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;recipient&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Sahabatku&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;sender&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Seseorang yang merindukanmu&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;message&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Halo! Semoga suratku menemukanmu dalam keadaan hangat dan baik-baik saja. Aku cuma ingin bilang: terima kasih sudah ada.&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;quoteText&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Bahagia itu sederhana, seperti membaca surat darimu.&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;quoteAuthor&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Anonim&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;bandH&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;210px&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;scene&quot;: {&quot;editor&quot;: null, &quot;default&quot;: {&quot;name&quot;: &quot;Senja&quot;, &quot;emoji&quot;: &quot;\ud83c\udf05&quot;, &quot;skyGrad&quot;: &quot;linear-gradient(180deg, #6A5B9A 0%, #FF9E7A 55%, #FFD59E 100%)&quot;, &quot;hasSun&quot;: true, &quot;sunColor&quot;: &quot;#FF7E5F&quot;, &quot;sunTop&quot;: &quot;44%&quot;, &quot;sunLeft&quot;: &quot;40%&quot;, &quot;sunSize&quot;: 118, &quot;hasSea&quot;: true, &quot;seaColor&quot;: &quot;#C97FA0&quot;, &quot;hasClouds&quot;: true, &quot;cloudColor&quot;: &quot;#FFC9A6&quot;, &quot;hasMoon&quot;: false, &quot;moonColor&quot;: &quot;#FBE9B0&quot;, &quot;hasStars&quot;: false, &quot;hasHills&quot;: false, &quot;hillColor&quot;: &quot;#66B86E&quot;, &quot;hillColor2&quot;: &quot;#8ED08A&quot;, &quot;hasFlowers&quot;: false, &quot;flowerColor&quot;: &quot;#FF8FB1&quot;}, &quot;tsType&quot;: &quot;object&quot;}
+}"></script>
+</body>
+</html>

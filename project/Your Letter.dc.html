@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Gaegu:wght@400;700&family=Jua&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;}
+  *{box-sizing:border-box;}
+  @keyframes yl-float{0%,100%{transform:translateY(0) rotate(var(--r,0deg));}50%{transform:translateY(-12px) rotate(var(--r,0deg));}}
+  @keyframes yl-open{0%{opacity:0;transform:translateY(28px) scale(.94) rotate(-2deg);}60%{opacity:1;}100%{opacity:1;transform:translateY(0) scale(1) rotate(0deg);}}
+  @keyframes yl-pop{0%{transform:scale(.8);opacity:0;}100%{transform:scale(1);opacity:1;}}
+  ::selection{background:#FFD84D;}
+</style>
+</helmet>
+
+<div style="min-height:100vh; font-family:'Nunito','Jua',sans-serif; color:#2E2A3E; background:#FFEFE2; background-image:radial-gradient(rgba(46,42,62,0.06) 1.4px, transparent 1.4px); background-size:22px 22px;">
+
+  <!-- PROTOTYPE NAV -->
+  <div style="position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:50; display:flex; gap:4px; background:#FFFDF6; border:2.5px solid #2E2A3E; border-radius:999px; padding:5px; box-shadow:4px 4px 0 rgba(46,42,62,0.9);">
+    <button onClick="{{ goLanding }}" style="{{ navBase }}background:{{ navBgLanding }}; color:{{ navFgLanding }};" style-hover="filter:brightness(0.97);">{{ t.navHome }}</button>
+    <button onClick="{{ goEditor }}" style="{{ navBase }}background:{{ navBgEditor }}; color:{{ navFgEditor }};" style-hover="filter:brightness(0.97);">{{ t.navWrite }}</button>
+    <button onClick="{{ goPreview }}" style="{{ navBase }}background:{{ navBgPreview }}; color:{{ navFgPreview }};" style-hover="filter:brightness(0.97);">{{ t.navPreview }}</button>
+    <button onClick="{{ goRead }}" style="{{ navBase }}background:{{ navBgRead }}; color:{{ navFgRead }};" style-hover="filter:brightness(0.97);">{{ t.navReceive }}</button>
+  </div>
+
+  <!-- LANGUAGE SWITCHER -->
+  <div style="position:fixed; top:14px; right:16px; z-index:50; display:flex; gap:3px; background:#FFFDF6; border:2.5px solid #2E2A3E; border-radius:999px; padding:4px; box-shadow:4px 4px 0 rgba(46,42,62,0.9);">
+    <button onClick="{{ setLangId }}" style="{{ langBase }}background:{{ langBgId }}; color:{{ langFgId }};" style-hover="filter:brightness(0.97);">ID</button>
+    <button onClick="{{ setLangEn }}" style="{{ langBase }}background:{{ langBgEn }}; color:{{ langFgEn }};" style-hover="filter:brightness(0.97);">EN</button>
+    <button onClick="{{ setLangKr }}" style="{{ langBase }}background:{{ langBgKr }}; color:{{ langFgKr }};" style-hover="filter:brightness(0.97);">KR</button>
+  </div>
+
+  <!-- ============ LANDING ============ -->
+  <sc-if value="{{ isLanding }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:1120px; margin:0 auto; padding:96px 24px 60px; display:grid; grid-template-columns:{{ landingGrid }}; gap:44px; align-items:center;">
+    <div>
+      <h1 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:{{ heroSize }}; line-height:1.02; margin:22px 0 0; letter-spacing:-1px;">Your <span style="color:#F5896F;">Letter</span></h1>
+      <p style="font-size:20px; line-height:1.6; max-width:460px; margin:18px 0 0; color:#4a4560;">{{ t.heroTagline }}</p>
+      <div style="display:flex; gap:14px; flex-wrap:wrap; margin-top:30px;">
+        <button onClick="{{ startWriting }}" style="{{ btnPrimary }}" style-hover="transform:translate(-2px,-2px); box-shadow:7px 7px 0 rgba(46,42,62,0.9);" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 rgba(46,42,62,0.9);">{{ t.btnStart }}</button>
+        <button onClick="{{ viewSample }}" style="{{ btnGhost }}" style-hover="transform:translate(-2px,-2px); box-shadow:6px 6px 0 rgba(46,42,62,0.9);" style-active="transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(46,42,62,0.9);">{{ t.btnSample }}</button>
+      </div>
+      <div style="display:flex; gap:26px; margin-top:38px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:9px; font-family:'Fredoka',sans-serif; font-weight:500; font-size:14px;"><span style="font-size:20px;">💬</span> {{ t.feat1 }}</div>
+        <div style="display:flex; align-items:center; gap:9px; font-family:'Fredoka',sans-serif; font-weight:500; font-size:14px;"><span style="font-size:20px;">🔗</span> {{ t.feat2 }}</div>
+      </div>
+    </div>
+    <div style="display:flex; justify-content:center;">
+      <div style="width:100%; max-width:380px; --r:3deg; animation:yl-float 6s ease-in-out infinite;">
+        <dc-import name="Postcard" greeting="{{ sampleCard.greeting }}" recipient="{{ sampleCard.to }}" sender="{{ sampleCard.from }}" message="{{ sampleCard.message }}" quote-text="{{ sampleCard.quoteText }}" quote-author="{{ sampleCard.quoteAuthor }}" scene="{{ sampleScene }}" band-h="196px" hint-size="100%,540px"></dc-import>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ EDITOR ============ -->
+  <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1180px; margin:0 auto; padding:92px 24px 70px;">
+    <h2 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:34px; margin:0 0 4px;">{{ t.edTitle }}</h2>
+    <p style="margin:0 0 26px; color:#6a6580; font-size:16px;">{{ t.edSubtitle }}</p>
+    <div style="display:grid; grid-template-columns:{{ editorGrid }}; gap:34px; align-items:start;">
+
+      <!-- FORM -->
+      <div style="background:#FFFDF6; border:3px solid #2E2A3E; border-radius:24px; padding:26px; box-shadow:6px 6px 0 rgba(46,42,62,0.9); display:flex; flex-direction:column; gap:20px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div>
+            <label style="{{ lbl }}">{{ t.lblTo }}</label>
+            <input value="{{ draft.to }}" onChange="{{ onTo }}" placeholder="{{ t.phTo }}" style="{{ inputStyle }}" style-focus="border-color:#F5896F;">
+          </div>
+          <div>
+            <label style="{{ lbl }}">{{ t.lblFrom }}</label>
+            <input value="{{ draft.from }}" onChange="{{ onFrom }}" placeholder="{{ t.phFrom }}" style="{{ inputStyle }}" style-focus="border-color:#F5896F;">
+          </div>
+        </div>
+
+        <div>
+          <label style="{{ lbl }}">{{ t.lblMessage }}</label>
+          <textarea value="{{ draft.message }}" onChange="{{ onMessage }}" placeholder="{{ t.phMessage }}" rows="5" style="{{ inputStyle }}resize:vertical; min-height:120px; font-family:'Gaegu',cursive; font-size:18px; line-height:1.5;" style-focus="border-color:#F5896F;"></textarea>
+        </div>
+
+        <div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;">
+            <label style="{{ lbl }}margin:0;">{{ t.lblQuote }}</label>
+            <button onClick="{{ randomQuote }}" style="{{ chipBtn }}" style-hover="background:#FFE7A0;" style-active="transform:translateY(1px);">{{ t.btnRandQuote }}</button>
+          </div>
+          <textarea value="{{ draft.quoteText }}" onChange="{{ onQuote }}" placeholder="{{ t.phQuote }}" rows="2" style="{{ inputStyle }}resize:vertical; font-family:'Gaegu',cursive; font-size:18px; background:#FFF7E0; border-color:#D8A94B;" style-focus="border-color:#C08A2b;"></textarea>
+        </div>
+
+        <div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+            <label style="{{ lbl }}margin:0;">{{ t.lblScene }}</label>
+            <button onClick="{{ randomScene }}" style="{{ chipBtn }}" style-hover="background:#FFE7A0;" style-active="transform:translateY(1px);">{{ t.btnRandScene }}</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px;">
+            <sc-for list="{{ scenesView }}" as="s" hint-placeholder-count="6">
+              <button onClick="{{ s.select }}" style="cursor:pointer; padding:0; border-radius:14px; overflow:hidden; border:{{ s.borderW }} solid #2E2A3E; box-shadow:{{ s.shadow }}; transition:transform .1s;" style-hover="transform:translateY(-2px);">
+                <div style="height:52px; background:{{ s.thumb }};"></div>
+                <div style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:11px; padding:6px 4px; background:{{ s.labelBg }}; color:{{ s.labelFg }};">{{ s.emoji }} {{ s.name }}</div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <button onClick="{{ goPreview }}" style="{{ btnPrimary }}margin-top:6px;" style-hover="transform:translate(-2px,-2px); box-shadow:7px 7px 0 rgba(46,42,62,0.9);" style-active="transform:translate(2px,2px); box-shadow:2px 2px 0 rgba(46,42,62,0.9);">{{ t.btnToPreview }}</button>
+      </div>
+
+      <!-- LIVE PREVIEW -->
+      <div style="position:{{ previewSticky }}; top:88px;">
+        <div style="font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px; color:#8a8598; margin-bottom:10px; text-align:center;">{{ t.livePreview }}</div>
+        <dc-import name="Postcard" greeting="{{ card.greeting }}" recipient="{{ card.to }}" sender="{{ card.from }}" message="{{ card.message }}" quote-text="{{ card.quoteText }}" quote-author="{{ card.quoteAuthor }}" scene="{{ scene }}" band-h="200px" hint-size="100%,560px"></dc-import>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ PREVIEW ============ -->
+  <sc-if value="{{ isPreview }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:640px; margin:0 auto; padding:92px 24px 70px;">
+    <h2 style="font-family:'Fredoka',sans-serif; font-weight:700; font-size:32px; margin:0 0 4px; text-align:center;">{{ t.pvTitle }}</h2>
+    <p style="margin:0 0 26px; color:#6a6580; text-align:center;">{{ t.pvSubtitle }}</p>
+    <dc-import name="Postcard" greeting="{{ card.greeting }}" recipient="{{ card.to }}" sender="{{ card.from }}" message="{{ card.message }}" quote-text="{{ card.quoteText }}" quote-author="{{ card.quoteAuthor }}" scene="{{ scene }}" band-h="240px" hint-size="100%,620px"></dc-import>
+
+    <div style="background:#FFFDF6; border:3px solid #2E2A3E; border-radius:20px; padding:20px; box-shadow:6px 6px 0 rgba(46,42,62,0.9); margin-top:26px;">
+      <label style="{{ lbl }}">{{ t.lblLink }}</label>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <input value="{{ link }}" readOnly="{{ true }}" style="{{ inputStyle }}flex:1; min-width:200px; font-family:'Nunito',sans-serif; font-weight:600; color:#4a4560;">
+        <button onClick="{{ copyLink }}" style="{{ btnCopy }}" style-hover="transform:translate(-1px,-1px);" style-active="transform:translate(1px,1px);">{{ copyLabel }}</button>
+      </div>
+      <div style="display:flex; gap:12px; margin-top:18px; flex-wrap:wrap;">
+        <button onClick="{{ goRead }}" style="{{ btnGhost }}flex:1; min-width:150px;" style-hover="transform:translate(-2px,-2px); box-shadow:6px 6px 0 rgba(46,42,62,0.9);" style-active="transform:translate(2px,2px);">{{ t.btnOpen }}</button>
+        <button onClick="{{ goEditor }}" style="{{ btnGhost }}flex:1; min-width:150px;" style-hover="transform:translate(-2px,-2px); box-shadow:6px 6px 0 rgba(46,42,62,0.9);" style-active="transform:translate(2px,2px);">{{ t.btnEdit }}</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ READ ============ -->
+  <sc-if value="{{ isRead }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:620px; margin:0 auto; padding:92px 24px 70px;">
+    <div style="text-align:center; margin-bottom:22px;">
+      <div style="display:inline-flex; align-items:center; gap:8px; background:#FFD84D; border:2.5px solid #2E2A3E; border-radius:999px; padding:8px 18px; font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; box-shadow:3px 3px 0 rgba(46,42,62,0.9); animation:yl-pop .4s ease both;">{{ t.rdBadge }}</div>
+    </div>
+    <div style="animation:yl-open .7s cubic-bezier(.2,.8,.2,1) both;">
+      <dc-import name="Postcard" greeting="{{ card.greeting }}" recipient="{{ card.to }}" sender="{{ card.from }}" message="{{ card.message }}" quote-text="{{ card.quoteText }}" quote-author="{{ card.quoteAuthor }}" scene="{{ scene }}" band-h="250px" hint-size="100%,640px"></dc-import>
+    </div>
+    <div style="display:flex; justify-content:center; gap:12px; margin-top:26px; flex-wrap:wrap;">
+      <button onClick="{{ startWriting }}" style="{{ btnPrimary }}" style-hover="transform:translate(-2px,-2px); box-shadow:7px 7px 0 rgba(46,42,62,0.9);" style-active="transform:translate(2px,2px);">{{ t.btnReply }}</button>
+      <button onClick="{{ goLanding }}" style="{{ btnGhost }}" style-hover="transform:translate(-2px,-2px); box-shadow:6px 6px 0 rgba(46,42,62,0.9);" style-active="transform:translate(2px,2px);">{{ t.btnHome }}</button>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1180, &quot;height&quot;: 820}
+}">
+class Component extends DCLogic {
+  state = {
+    screen: 'landing',
+    sceneIndex: 0,
+    copied: false,
+    lang: 'id',
+    isMobile: typeof window !== 'undefined' && window.innerWidth < 860,
+    linkId: Math.random().toString(36).slice(2, 8),
+    letter: { to: '', from: '', message: '', quoteText: '', quoteAuthor: '' },
+  };
+
+  strings = {
+    id: {
+      navHome: 'Beranda', navWrite: 'Tulis', navPreview: 'Pratinjau', navReceive: 'Terima',
+      heroTagline: 'Tulis pesan dari hati, sampaikan kata-kata yang tak dapat diucapkan secara langsung di sini <3',
+      btnStart: '✍️ Mulai Menulis', btnSample: '👀 Lihat Contoh',
+      feat1: 'Tulis suratmu', feat2: 'Bagikan tautan',
+      edTitle: 'Tulis suratmu ✍️', edSubtitle: 'Isi pesannya, pilih kutipan & suasana. Pratinjau di sebelah kananmu akan mengikuti perubahan.',
+      lblTo: 'Untuk', lblFrom: 'Dari', lblMessage: 'Pesan', lblQuote: 'Kutipan', lblScene: 'Pilih Suasana',
+      phTo: 'Nama penerima', phFrom: 'Namamu', phMessage: 'Tulis apa yang ada di hatimu…', phQuote: 'Kutipan akan muncul di sini — atau tulis sendiri',
+      btnRandQuote: '🎲 Acak kutipan', btnRandScene: '🎲 Acak suasana',
+      livePreview: 'PRATINJAU LANGSUNG', btnToPreview: 'Lihat Pratinjau →',
+      pvTitle: 'Suratmu siap dikirim 🎉', pvSubtitle: 'Beginilah surat yang akan diterima. Bagikan tautannya!',
+      lblLink: '🔗 Tautan surat', btnCopyIdle: 'Salin Tautan', btnCopyDone: '✓ Tersalin!',
+      btnOpen: '📬 Buka sbg penerima', btnEdit: '← Ubah surat',
+      rdBadge: '💌 Kamu menerima sebuah surat!', btnReply: '✍️ Balas surat', btnHome: '🏠 Beranda',
+      fbTo: 'Sahabatku', fbFrom: 'Seseorang', fbMessage: 'Tulis pesanmu di sini… ceritakan apa yang ada di hatimu. 🌿', fbQuote: 'Kutipan favoritmu akan muncul di sini.',
+      sampTo: 'Kamu', sampFrom: 'Aku', sampMessage: 'Halo! Suratku sederhana saja — semoga kamu baik-baik saja dan hari ini secerah langit di gambar ini. 🧡', sampQuote: 'Bahagia itu sederhana, seperti membaca surat darimu.',
+      anon: 'Anonim',
+    },
+    en: {
+      navHome: 'Home', navWrite: 'Write', navPreview: 'Preview', navReceive: 'Receive',
+      heroTagline: "Write a message from the heart — say the words you can't say out loud, right here <3",
+      btnStart: '✍️ Start Writing', btnSample: '👀 See Example',
+      feat1: 'Write your letter', feat2: 'Share a link',
+      edTitle: 'Write your letter ✍️', edSubtitle: 'Fill in your message, pick a quote & a mood. The preview on the right updates live.',
+      lblTo: 'To', lblFrom: 'From', lblMessage: 'Message', lblQuote: 'Quote', lblScene: 'Pick a Mood',
+      phTo: 'Recipient name', phFrom: 'Your name', phMessage: "Write what's in your heart…", phQuote: 'A quote will appear here — or write your own',
+      btnRandQuote: '🎲 Random quote', btnRandScene: '🎲 Random mood',
+      livePreview: 'LIVE PREVIEW', btnToPreview: 'See Preview →',
+      pvTitle: 'Your letter is ready 🎉', pvSubtitle: "This is what they'll receive. Share the link!",
+      lblLink: '🔗 Letter link', btnCopyIdle: 'Copy Link', btnCopyDone: '✓ Copied!',
+      btnOpen: '📬 Open as recipient', btnEdit: '← Edit letter',
+      rdBadge: "💌 You've received a letter!", btnReply: '✍️ Reply', btnHome: '🏠 Home',
+      fbTo: 'Dear friend', fbFrom: 'Someone', fbMessage: "Write your message here… tell them what's on your heart. 🌿", fbQuote: 'Your favorite quote will appear here.',
+      sampTo: 'You', sampFrom: 'Me', sampMessage: "Hi! My letter is a simple one — I hope you're well, and that today is as bright as the sky in this picture. 🧡", sampQuote: 'Happiness is simple, like reading a letter from you.',
+      anon: 'Anonymous',
+    },
+    kr: {
+      navHome: '홈', navWrite: '작성', navPreview: '미리보기', navReceive: '받기',
+      heroTagline: '마음속 이야기를 편지로 적어보세요. 직접 하지 못한 말을 여기에 담아보세요 <3',
+      btnStart: '✍️ 편지 쓰기', btnSample: '👀 예시 보기',
+      feat1: '편지 작성', feat2: '링크 공유',
+      edTitle: '편지를 써보세요 ✍️', edSubtitle: '메시지를 채우고, 문구와 분위기를 골라보세요. 오른쪽 미리보기가 실시간으로 바뀝니다.',
+      lblTo: '받는 사람', lblFrom: '보내는 사람', lblMessage: '메시지', lblQuote: '문구', lblScene: '분위기 선택',
+      phTo: '받는 사람 이름', phFrom: '당신의 이름', phMessage: '마음속 이야기를 적어보세요…', phQuote: '여기에 문구가 나타납니다 — 직접 써도 좋아요',
+      btnRandQuote: '🎲 랜덤 문구', btnRandScene: '🎲 랜덤 분위기',
+      livePreview: '실시간 미리보기', btnToPreview: '미리보기 →',
+      pvTitle: '편지가 준비됐어요 🎉', pvSubtitle: '받는 사람이 보게 될 모습이에요. 링크를 공유하세요!',
+      lblLink: '🔗 편지 링크', btnCopyIdle: '링크 복사', btnCopyDone: '✓ 복사됨!',
+      btnOpen: '📬 받는 사람으로 열기', btnEdit: '← 편지 수정',
+      rdBadge: '💌 편지가 도착했어요!', btnReply: '✍️ 답장하기', btnHome: '🏠 홈',
+      fbTo: '소중한 친구에게', fbFrom: '누군가', fbMessage: '여기에 메시지를 적어보세요… 마음속 이야기를 들려주세요. 🌿', fbQuote: '좋아하는 문구가 여기에 나타납니다.',
+      sampTo: '너', sampFrom: '나로부터', sampMessage: '안녕! 소박한 편지야 — 잘 지내길 바라고, 오늘이 이 그림 속 하늘처럼 맑기를 바라. 🧡', sampQuote: '행복은 단순해, 너의 편지를 읽는 것처럼.',
+      anon: '익명',
+    },
+  };
+
+  scenes = [
+    { names: { id: 'Siang Cerah', en: 'Sunny Day', kr: '맑은 낮' }, emoji: '☀️', skyTop: '#8FD3FF', skyMid: '#BEE7FF', skyBottom: '#E9F8EE', hasSun: true, sunColor: '#FFD84D', sunTop: '14%', sunLeft: '72%', sunSize: 88, hasClouds: true, cloudColor: '#FFFFFF', hasHills: true, hillColor: '#66B86E', hillColor2: '#8ED08A', hasFlowers: true, flowerColor: '#FF8FB1', hasSea: false, hasMoon: false, moonColor: '#FBE9B0', hasStars: false },
+    { names: { id: 'Senja', en: 'Sunset', kr: '노을' }, emoji: '🌅', skyTop: '#6A5B9A', skyMid: '#FF9E7A', skyBottom: '#FFD59E', hasSun: true, sunColor: '#FF7E5F', sunTop: '46%', sunLeft: '40%', sunSize: 120, hasClouds: true, cloudColor: '#FFC9A6', hasSea: true, seaColor: '#C97FA0', hasHills: false, hillColor: '#66B86E', hillColor2: '#8ED08A', hasFlowers: false, flowerColor: '#FF8FB1', hasMoon: false, moonColor: '#FBE9B0', hasStars: false },
+    { names: { id: 'Tepi Laut', en: 'Seaside', kr: '바닷가' }, emoji: '🌊', skyTop: '#7FC5E8', skyMid: '#B7E4F0', skyBottom: '#DFF6F7', hasSun: true, sunColor: '#FFE08A', sunTop: '16%', sunLeft: '20%', sunSize: 70, hasClouds: true, cloudColor: '#FFFFFF', hasSea: true, seaColor: '#3EA7C4', hasHills: false, hillColor: '#66B86E', hillColor2: '#8ED08A', hasFlowers: false, flowerColor: '#FF8FB1', hasMoon: false, moonColor: '#FBE9B0', hasStars: false },
+    { names: { id: 'Taman', en: 'Garden', kr: '정원' }, emoji: '🌷', skyTop: '#BDE7FF', skyMid: '#E4F6E9', skyBottom: '#F4FBEF', hasSun: true, sunColor: '#FFD84D', sunTop: '13%', sunLeft: '74%', sunSize: 78, hasClouds: true, cloudColor: '#FFFFFF', hasHills: true, hillColor: '#5FB56B', hillColor2: '#88CE86', hasFlowers: true, flowerColor: '#FF7EA8', hasSea: false, hasMoon: false, moonColor: '#FBE9B0', hasStars: false },
+    { names: { id: 'Malam Berbintang', en: 'Starry Night', kr: '별이 빛나는 밤' }, emoji: '🌙', skyTop: '#241D46', skyMid: '#3A2E63', skyBottom: '#5B4A86', hasMoon: true, moonColor: '#FBE9B0', hasStars: true, hasHills: true, hillColor: '#2A2350', hillColor2: '#3B3168', hasSun: false, sunColor: '#FFD84D', sunTop: '14%', sunLeft: '72%', sunSize: 80, hasClouds: false, cloudColor: '#FFFFFF', hasFlowers: false, flowerColor: '#FF8FB1', hasSea: false },
+    { names: { id: 'Fajar', en: 'Dawn', kr: '새벽' }, emoji: '🌸', skyTop: '#FFC1D6', skyMid: '#FFE0D0', skyBottom: '#FFF4D6', hasSun: true, sunColor: '#FFB27A', sunTop: '30%', sunLeft: '64%', sunSize: 96, hasClouds: true, cloudColor: '#FFF3EC', hasHills: true, hillColor: '#E79BB4', hillColor2: '#F3B7CB', hasFlowers: false, flowerColor: '#FF8FB1', hasSea: false, hasMoon: false, moonColor: '#FBE9B0', hasStars: false },
+  ];
+
+  quotes = [
+    { id: 'Hal-hal kecil pada akhirnya adalah hal yang paling besar.', en: 'In the end, the little things are the biggest things.', kr: '결국 작은 것들이 가장 큰 것이 된다.' },
+    { id: 'Jarak hanyalah ujian seberapa jauh cinta mampu berjalan.', en: 'Distance is only a test of how far love can travel.', kr: '거리는 사랑이 얼마나 멀리 갈 수 있는지에 대한 시험일 뿐이야.' },
+    { id: 'Terima kasih sudah menjadi rumah di hari-hari yang berat.', en: 'Thank you for being home on the hard days.', kr: '힘든 날에 나의 집이 되어줘서 고마워.' },
+    { id: 'Semoga hari ini sebaik senyummu.', en: 'May today be as lovely as your smile.', kr: '오늘이 너의 미소만큼 좋은 하루이길.' },
+    { id: 'Kamu tidak pernah benar-benar sendirian, aku selalu di sini.', en: 'You are never truly alone — I am always here.', kr: '너는 결코 혼자가 아니야, 난 늘 여기 있어.' },
+    { id: 'Bahagia itu sederhana, seperti membaca surat darimu.', en: 'Happiness is simple, like reading a letter from you.', kr: '행복은 단순해, 너의 편지를 읽는 것처럼.' },
+    { id: 'Setiap akhir adalah awal yang sedang menyamar.', en: 'Every ending is a beginning in disguise.', kr: '모든 끝은 변장한 시작이야.' },
+    { id: 'Pelan-pelan saja, kamu sudah lebih dari cukup.', en: 'Take it slow — you are already more than enough.', kr: '천천히 해도 돼, 너는 이미 충분해.' },
+    { id: 'Semoga selalu ada senja yang kamu sukai di setiap harimu.', en: 'May there always be a sunset you love in every day.', kr: '매일 네가 좋아하는 노을이 함께하길.' },
+  ];
+
+  mkScene(i, lang) {
+    const s = this.scenes[i];
+    return Object.assign({}, s, { name: s.names[lang], skyGrad: `linear-gradient(180deg, ${s.skyTop} 0%, ${s.skyMid} 55%, ${s.skyBottom} 100%)` });
+  }
+
+  go(screen) { this.setState({ screen, copied: false }); window.scrollTo(0, 0); }
+
+  componentDidMount() {
+    this._onResize = () => {
+      const m = window.innerWidth < 860;
+      if (m !== this.state.isMobile) this.setState({ isMobile: m });
+    };
+    window.addEventListener('resize', this._onResize);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this._onResize); }
+
+  renderVals() {
+    const st = this.state;
+    const lang = st.lang;
+    const t = this.strings[lang];
+    const L = st.letter;
+    const set = (k) => (e) => this.setState({ letter: Object.assign({}, this.state.letter, { [k]: e.target.value }) });
+
+    const greet = (name) => lang === 'kr' ? `${name}에게,` : (lang === 'en' ? `Dear ${name},` : `Untuk ${name},`);
+
+    const cardTo = L.to || t.fbTo;
+    const card = {
+      to: cardTo,
+      greeting: greet(cardTo),
+      from: L.from || t.fbFrom,
+      message: L.message || t.fbMessage,
+      quoteText: L.quoteText || t.fbQuote,
+      quoteAuthor: L.quoteText ? L.quoteAuthor : '',
+    };
+
+    const scenesView = this.scenes.map((s, i) => {
+      const active = i === st.sceneIndex;
+      return {
+        name: s.names[lang], emoji: s.emoji,
+        thumb: `linear-gradient(160deg, ${s.skyTop}, ${s.skyMid}, ${s.skyBottom})`,
+        select: () => this.setState({ sceneIndex: i }),
+        borderW: active ? '3px' : '2px',
+        shadow: active ? '4px 4px 0 rgba(46,42,62,0.9)' : 'none',
+        labelBg: active ? '#F5896F' : '#FFFDF6',
+        labelFg: active ? '#ffffff' : '#2E2A3E',
+      };
+    });
+
+    const navBase = "cursor:pointer; border:none; border-radius:999px; padding:8px 15px; font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px; transition:all .12s;";
+    const langBase = "cursor:pointer; border:none; border-radius:999px; padding:7px 11px; font-family:'Fredoka',sans-serif; font-weight:700; font-size:12px; transition:all .12s;";
+    const active = '#2E2A3E', inact = 'transparent', afg = '#ffffff', ifg = '#2E2A3E';
+    const sc = st.screen;
+
+    const btnPrimary = "cursor:pointer; font-family:'Fredoka',sans-serif; font-weight:600; font-size:17px; color:#fff; background:#F5896F; border:3px solid #2E2A3E; border-radius:16px; padding:14px 24px; box-shadow:5px 5px 0 rgba(46,42,62,0.9); transition:all .12s;";
+    const btnGhost = "cursor:pointer; font-family:'Fredoka',sans-serif; font-weight:600; font-size:16px; color:#2E2A3E; background:#FFFDF6; border:3px solid #2E2A3E; border-radius:16px; padding:13px 22px; box-shadow:4px 4px 0 rgba(46,42,62,0.9); transition:all .12s;";
+    const btnCopy = "cursor:pointer; font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; color:#2E2A3E; background:#FFD84D; border:3px solid #2E2A3E; border-radius:14px; padding:12px 20px; box-shadow:3px 3px 0 rgba(46,42,62,0.9); transition:all .12s; white-space:nowrap;";
+    const chipBtn = "cursor:pointer; font-family:'Fredoka',sans-serif; font-weight:600; font-size:12px; color:#7a5a12; background:#FFF0BE; border:2px solid #D8A94B; border-radius:999px; padding:6px 12px; transition:all .1s;";
+    const inputStyle = "width:100%; font-family:'Nunito',sans-serif; font-size:15px; color:#2E2A3E; background:#FFFFFF; border:2.5px solid #2E2A3E; border-radius:12px; padding:11px 13px; outline:none; transition:border-color .12s;";
+    const lbl = "display:block; font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px; color:#6a6580; margin-bottom:6px;";
+
+    const langBg = (l) => lang === l ? active : inact;
+    const langFg = (l) => lang === l ? afg : ifg;
+
+    return {
+      t,
+      isLanding: sc === 'landing', isEditor: sc === 'editor', isPreview: sc === 'preview', isRead: sc === 'read',
+      landingGrid: st.isMobile ? '1fr' : '1.05fr 0.95fr',
+      editorGrid: st.isMobile ? '1fr' : '1.1fr 0.9fr',
+      previewSticky: st.isMobile ? 'static' : 'sticky',
+      heroSize: st.isMobile ? '46px' : '64px',
+      draft: L, card,
+      scene: this.mkScene(st.sceneIndex, lang),
+      sampleScene: this.mkScene(1, lang),
+      sampleCard: { to: t.sampTo, greeting: greet(t.sampTo), from: t.sampFrom, message: t.sampMessage, quoteText: t.sampQuote, quoteAuthor: t.anon },
+      scenesView,
+      link: `yourletter.app/s/${st.linkId}`,
+      copyLabel: st.copied ? t.btnCopyDone : t.btnCopyIdle,
+
+      onTo: set('to'), onFrom: set('from'), onMessage: set('message'), onQuote: set('quoteText'),
+      randomQuote: () => { const q = this.quotes[Math.floor(Math.random() * this.quotes.length)]; this.setState({ letter: Object.assign({}, this.state.letter, { quoteText: q[lang], quoteAuthor: t.anon }) }); },
+      randomScene: () => { let i = st.sceneIndex; if (this.scenes.length > 1) { while (i === st.sceneIndex) i = Math.floor(Math.random() * this.scenes.length); } this.setState({ sceneIndex: i }); },
+
+      setLangId: () => this.setState({ lang: 'id' }),
+      setLangEn: () => this.setState({ lang: 'en' }),
+      setLangKr: () => this.setState({ lang: 'kr' }),
+
+      goLanding: () => this.go('landing'),
+      goEditor: () => this.go('editor'),
+      goPreview: () => this.go('preview'),
+      goRead: () => this.go('read'),
+      startWriting: () => { this.setState({ letter: { to: '', from: '', message: '', quoteText: '', quoteAuthor: '' } }); this.go('editor'); },
+      viewSample: () => { this.setState({ sceneIndex: 1, letter: { to: t.sampTo, from: t.sampFrom, message: t.sampMessage, quoteText: t.sampQuote, quoteAuthor: t.anon } }); this.go('read'); },
+      copyLink: () => { try { navigator.clipboard && navigator.clipboard.writeText(`yourletter.app/s/${st.linkId}`); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 2000); },
+
+      navBase, langBase, btnPrimary, btnGhost, btnCopy, chipBtn, inputStyle, lbl,
+      navBgLanding: sc === 'landing' ? active : inact, navFgLanding: sc === 'landing' ? afg : ifg,
+      navBgEditor: sc === 'editor' ? active : inact, navFgEditor: sc === 'editor' ? afg : ifg,
+      navBgPreview: sc === 'preview' ? active : inact, navFgPreview: sc === 'preview' ? afg : ifg,
+      navBgRead: sc === 'read' ? active : inact, navFgRead: sc === 'read' ? afg : ifg,
+      langBgId: langBg('id'), langFgId: langFg('id'),
+      langBgEn: langBg('en'), langFgEn: langFg('en'),
+      langBgKr: langBg('kr'), langFgKr: langFg('kr'),
+    };
+  }
+}
+</script>
+</body>
+</html>

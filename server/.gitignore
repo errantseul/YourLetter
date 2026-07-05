@@ -1,0 +1,5 @@
+node_modules/
+letters.db
+letters.db-journal
+letters.db-wal
+letters.db-shm
