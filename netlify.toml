@@ -3,6 +3,9 @@
   publish = "client/dist"
   functions = "netlify/functions"
 
+[functions."send-scheduled-letters"]
+  schedule = "*/10 * * * *"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"

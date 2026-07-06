@@ -1,4 +1,3 @@
-import { schedule } from '@netlify/functions';
 import { pool, init } from '../../server/db.js';
 
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Your Letter <onboarding@resend.dev>';
@@ -75,4 +74,11 @@ async function sendDueLetters() {
   return { statusCode: 200, body: JSON.stringify({ checked: due.rows.length, sent }) };
 }
 
-export const handler = schedule('*/10 * * * *', sendDueLetters);
+// Scheduling is declared in netlify.toml ([functions."send-scheduled-letters"]
+// schedule = ...) rather than via the @netlify/functions `schedule()` wrapper
+// — that package failed to bundle correctly for this repo's layout
+// (Runtime.ImportModuleError: Cannot find module ".../dist/main.cjs").
+export const handler = async () => {
+  const result = await sendDueLetters();
+  return result;
+};
