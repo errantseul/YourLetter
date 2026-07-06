@@ -43,6 +43,7 @@ async function sendDueLetters() {
   );
 
   let sent = 0;
+  const debug = []; // TEMPORARY — remove once email sending is confirmed working.
   for (const row of due.rows) {
     const lang = ['id', 'en', 'kr'].includes(row.lang) ? row.lang : 'id';
     const link = `${SITE_URL}/s/${row.id}`;
@@ -61,17 +62,20 @@ async function sendDueLetters() {
         }),
       });
       if (!res.ok) {
-        console.error(`Failed to send letter ${row.id}:`, res.status, await res.text().catch(() => ''));
+        const text = await res.text().catch(() => '');
+        console.error(`Failed to send letter ${row.id}:`, res.status, text);
+        debug.push({ id: row.id, status: res.status, text, hasApiKey: !!process.env.RESEND_API_KEY, from: FROM_EMAIL });
         continue;
       }
       await pool.query('UPDATE letters SET sent_at = $1 WHERE id = $2', [new Date().toISOString(), row.id]);
       sent += 1;
     } catch (err) {
       console.error(`Error sending letter ${row.id}:`, err.message);
+      debug.push({ id: row.id, error: err.message });
     }
   }
 
-  return { statusCode: 200, body: JSON.stringify({ checked: due.rows.length, sent }) };
+  return { statusCode: 200, body: JSON.stringify({ checked: due.rows.length, sent, debug }) };
 }
 
 // Scheduling is declared in netlify.toml ([functions."send-scheduled-letters"]
