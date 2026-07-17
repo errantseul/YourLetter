@@ -2,7 +2,7 @@
 
 This project follows a [Code of Conduct](./CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code.
 
-# CODING AGENTS: READ THIS FIRST
+## CODING AGENTS: READ THIS FIRST
 
 This is a **handoff bundle** from Claude Design (claude.ai/design).
 
